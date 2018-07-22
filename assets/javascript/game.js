@@ -112,7 +112,7 @@ var gameo = {
             }
             gameo.addevent();
             if(gameo.wins === 0 && gameo.loses === 0) {
-                setTimeout(function() {alert("Welcome to the Star Wars RPG game!\nPlease choose a character by clicking to begin!\n\nRULES: Player must a choose character and defeat the rest of the remaining characters. Each character has different attack, counter attack, and health levels. Your character's attack power will grow with each attack. Choose wisely, may the force be with you. ")}, 250);
+                setTimeout(function() {alert("Welcome to the Star Wars RPG game!\nPlease choose a character by clicking to begin!\n\nRULES: Player must a choose character and defeat the rest of the remaining characters. Each character has different attack, counter attack, and health levels. Your character's attack power will grow with each attack. Choose wisely, may the force be with you. ")}, 500);
             }
         } catch (error) {
             console.error(error);
