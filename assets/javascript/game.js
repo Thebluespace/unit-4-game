@@ -7,11 +7,13 @@
 var gameo = {
     characters: ["gamecharacterone","gamecharactertwo","gamecharacterthree","gamecharacterfour"],
     beaten: 0,
+    characteractualname: "",
     characterselection: "", // id name
     charactername: "", //health id
     characterhealth: 0, //.health
     characterbaseatt: 0,
     characterattack: 0, //.attack
+    enemyactualname: "",
     enemycharacter: "", // id name
     enemyname: "", // .name
     enemyhealth: 0,  //.health
@@ -109,6 +111,9 @@ var gameo = {
                 }   
             }
             gameo.addevent();
+            if(gameo.wins === 0 && gameo.loses === 0) {
+                setTimeout(function() {alert("Welcome to the Star Wars RPG game!\nPlease choose a character by clicking to begin!\n\nRULES: Player must a choose character and defeat the rest of the remaining characters. Each character has different attack, counter attack, and health levels. Your character's attack power will grow with each attack. Choose wisely, may the force be with you. ")}, 250);
+            }
         } catch (error) {
             console.error(error);
         }
@@ -120,26 +125,35 @@ var gameo = {
                 gameo.enemyname = "#chealth0";
                 gameo.enemyhealth = gamecharacterone.characterhealth;
                 gameo.enemycounterattack = gamecharacterone.charactercounterattack;
+                gameo.enemyactualname = gamecharacterone.charactername;
             break;
             case "charactertile1":
                 gameo.enemyname = "#chealth1";
                 gameo.enemyhealth = gamecharactertwo.characterhealth;
                 gameo.enemycounterattack = gamecharactertwo.charactercounterattack;
+                gameo.enemyactualname = gamecharactertwo.charactername;
             break;
             case "charactertile2":
                 gameo.enemyname = "#chealth2";
                 gameo.enemyhealth = gamecharacterthree.characterhealth;
                 gameo.enemycounterattack = gamecharacterthree.charactercounterattack;
+                gameo.enemyactualname = gamecharacterthree.charactername;
             break;
             case "charactertile3":
                 gameo.enemyname = "#chealth3";
                 gameo.enemyhealth = gamecharacterfour.characterhealth;
                 gameo.enemycounterattack = gamecharacterfour.charactercounterattack;
+                gameo.enemyactualname = gamecharacterfour.charactername;
             break;
         }
         gameo.enemycharacter = "#" + event.attr("id");
         gameo.addnewevent("enemy", gameo.enemycharacter);
-        $(event).appendTo("#enemytoattack")
+        $(event).appendTo("#enemytoattack");
+        if(gameo.beaten === 0){
+            if(gameo.wins === 0 && gameo.loses === 0) {
+                setTimeout(function() {alert("Now click on your character to attack")},250);
+            }
+        }
     },
     defeatedenemy: function(event){    
         $(gameo.enemycharacter).appendTo("#selectionarea");
@@ -148,6 +162,10 @@ var gameo = {
         gameo.beaten += 1;
         if (gameo.beaten === 3){
             gameo.endGame("win");
+            return;
+        }
+        if(gameo.wins === 0 && gameo.loses === 0) {
+            setTimeout(function() {alert("Nice one!\nYou defeated: " + gameo.enemyactualname + "\n\nPlease click on a new enemy to continue!")},250);
         }
     },
     selectcharacter: function(event) {
@@ -157,6 +175,7 @@ var gameo = {
                 gameo.characterattack = gamecharacterone.characterattack;
                 gameo.characterbaseatt = gamecharacterone.characterattack;
                 gameo.characterhealth = gamecharacterone.characterhealth;
+                gameo.characteractualname = gamecharacterone.charactername;
             break;
             case "charactertile1":
                 gameo.charactername = "#chealth1";
@@ -164,6 +183,7 @@ var gameo = {
                 gameo.characterattack = gamecharactertwo.characterattack;
                 gameo.characterbaseatt = gamecharactertwo.characterattack;
                 gameo.characterhealth = gamecharactertwo.characterhealth;
+                gameo.characteractualname = gamecharactertwo.charactername;
             break;
             case "charactertile2":
                 gameo.charactername = "#chealth2";
@@ -171,6 +191,7 @@ var gameo = {
                 gameo.characterattack = gamecharacterthree.characterattack;
                 gameo.characterbaseatt = gamecharacterthree.characterattack;
                 gameo.characterhealth = gamecharacterthree.characterhealth;
+                gameo.characteractualname = gamecharacterthree.charactername;
             break;
             case "charactertile3":
                 gameo.charactername = "#chealth3";
@@ -178,6 +199,7 @@ var gameo = {
                 gameo.characterattack = gamecharacterfour.characterattack;
                 gameo.characterbaseatt = gamecharacterfour.characterattack;
                 gameo.characterhealth = gamecharacterfour.characterhealth;
+                gameo.characteractualname = gamecharacterfour.charactername;
             break;
             default:
                 alert(event);
@@ -187,27 +209,37 @@ var gameo = {
         $(event).appendTo("#yourcharactertile");
         gameo.addnewevent("character", gameo.characterselection);
         gameo.movetoenemy(event.attr("id"));
+        if(gameo.wins === 0 && gameo.loses === 0) {
+            setTimeout(function() {alert("Now choose an enemy to attack!")},250);
+        }
     },
     movetoenemy: function(id) {
         var ids = ["charactertile0","charactertile1","charactertile2","charactertile3"];
         for (i=0; i < ids.length; i++){
-            if (i != id){
-                $("$" + ids[i]).appendTo("#availableenemies");
+            if (id != ids[i]){
+                $("#" + ids[i]).appendTo("#availableenemies");
             }
         }
 
     },
     endGame: function(type) {
+        try{
+            if (type === "win"){
+                gameo.wins += 1;
+                var message = "You Won! \n Character used: " + gameo.characteractualname + "\n Health remaining: " + gameo.characterhealth + "\n Ending Attack Power: " + gameo.characterattack + "\n\n Wins: " + gameo.wins + "\n Loses: " + gameo.loses + "\n\n Please click ok to reset the game\nnote: tutorial prompts will no longer show";
+                setTimeout(function(){alert(message)},250);
+                gameo.removeTiles();
+                gameo.formReset();
 
-        if (type === "win"){
-            var message = "You Won! \n Character used: " + gameo.charactername + "\n Health remaining: " + gameo.characterhealth + "\n Ending Attack Power: " + gameo.characterattack + "\n\n Wins: " + gameo.wins + "\n Loses: " + gameo.loses + "\n\n Please click ok to reset the game";
-            alert(message);
-            gameo.formReset();
-
-        } else if (type === "lose"){
-            var message = "You Lost! \n Character used: " + gameo.charactername + "\n Ending Attack Power: " + game.characterattack + "\n Killing Enemy: " + gameo.enemyname + "Enemy Health Reamining: " + gameo.enemyhealth + "\n\n Wins: " + gameo.wins + "\n Loses: " + gameo.loses + "\n\n Please click ok to reset the game";
-            alert(message);
-            gameo.formReset();
+            } else if (type === "lose"){
+                gameo.loses += 1;
+                var message = "You Lost! \n Character used: " + gameo.characteractualname + "\n Ending Attack Power: " + gameo.characterattack + "\n Killing Enemy: " + gameo.enemyactualname + "\n Enemy Health Reamining: " + gameo.enemyhealth + "\n\n Wins: " + gameo.wins + "\n Loses: " + gameo.loses + "\n\n Please click ok to reset the game\nnote: tutorial prompts will no longer show";
+                setTimeout(function(){alert(message)},250);
+                gameo.removeTiles();
+                gameo.formReset();
+            }
+        } catch(error) {
+            console.error(error);
         }
 
     },
@@ -222,15 +254,19 @@ var gameo = {
         gameo.enemyname = "";
         gameo.enemyhealth = 0;
         gameo.enemycounterattack = 0;
-        gameo.wins = 0;
-        gameo.loses = 0;
+    },
+    removeTiles: function(){
+        for (i=0; i < gameo.characters.length; i++) {
+            $("#charactertile" + i).remove();
+        }
+        $(".ui-effects-placeholder").remove();
     }
 };
 
 var gamecharacterone = {
     charactername: "Qui Gon Jinn",
     characterimage: "assets/images/QuigonJinn.jpeg",
-    characterattack: 5,
+    characterattack: 6,
     charactercounterattack: 10,
     characterhealth: 100,
     addtoselectionarea: function() {
@@ -258,7 +294,7 @@ var gamecharacterone = {
 var gamecharactertwo = {
     charactername: "Count Dooku",
     characterimage: "assets/images/countdooku.jpeg",
-    characterattack: 4,
+    characterattack: 8,
     charactercounterattack: 12,
     characterhealth: 80,
     addtoselectionarea: function() {
@@ -314,7 +350,7 @@ var gamecharacterthree = {
 var gamecharacterfour = {
     charactername: "Luminara",
     characterimage: "assets/images/luminara.jpg",
-    characterattack: 6,
+    characterattack: 5,
     charactercounterattack: 15,
     characterhealth: 120,
     addtoselectionarea: function() {

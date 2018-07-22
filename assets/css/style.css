@@ -54,10 +54,16 @@ body, html {
 }
 .gamecontainer {
     margin: 0% 10% 0% 10%;
+    height: 80%;
+    width: 85%
 
 }
 
 #yourcharactertile, #enemiestile, #defendtile {
+    float: left;
+    margin: 0px 15px 0px 15px;
+    padding: 5px;
+    border: solid green; 
     height: auto;
     width: auto;
 
