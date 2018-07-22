@@ -1,0 +1,64 @@
+body, html {
+    height: 100%;
+}
+.selectionarea {
+    margin: 0px 15px 0px 15px;
+    height: 350px;
+    width: 100%;
+}
+
+#charactertile0, #charactertile1, #charactertile2, #charactertile3 {
+    float: left;
+    margin: 15px;
+}
+.bgi {
+    background-image: url("../images/background.jpg");
+    z-index: 1;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 100%;
+    width: 100%
+}
+
+#cheader {
+    font-size: 24px;
+    text-align: center;
+    font-weight: bold;
+}
+.cimg {
+    height: 200px;
+    width: 200px;
+}
+#chealth0, #chealth1, #chealth2, #chealth3 {
+    font-size: 36px;
+    font-weight: bold;
+    
+    text-align: center;
+    color: green;
+}
+
+.gameheader{
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    color: gold;
+    text-shadow: 3px 3px black;
+}
+
+.characterheader {
+    text-align: left;
+    font-size: 36px;
+    color: red;
+    font-weight: bold;
+}
+.gamecontainer {
+    margin: 0% 10% 0% 10%;
+
+}
+
+#yourcharactertile, #enemiestile, #defendtile {
+    height: auto;
+    width: auto;
+
+}
