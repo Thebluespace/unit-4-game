@@ -22,11 +22,18 @@ body, html {
 }
 
 #cheader {
-    font-size: 24px;
+    font-size: 26px;
     text-align: center;
     font-weight: bold;
+    color: gold;
+    text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
 }
 .cimg {
+    object-fit: fill;
     height: 200px;
     width: 200px;
 }

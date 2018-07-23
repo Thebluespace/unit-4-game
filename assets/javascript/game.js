@@ -6,37 +6,47 @@
 
 var gameo = {
     characters: ["gamecharacterone","gamecharactertwo","gamecharacterthree","gamecharacterfour"],
-    beaten: 0,
-    characteractualname: "",
-    characterselection: "", // id name
-    charactername: "", //health id
-    characterhealth: 0, //.health
-    characterbaseatt: 0,
-    characterattack: 0, //.attack
-    enemyactualname: "",
-    enemycharacter: "", // id name
-    enemyname: "", // .name
-    enemyhealth: 0,  //.health
-    enemycounterattack: 0, // .attack
-    wins: 0,
-    loses: 0,
-    attack: function() {
+    beaten: 0, // if this number hits 3, you win the game
+    characteractualname: "", // character name
+    characterselection: "",  // charactertile html id
+    charactername: "", // character health id
+    characterhealth: 0, // character health stat
+    characterbaseatt: 0, // character base attack stat
+    characterattack: 0, // character current attack
+    enemyactualname: "", // enemy name
+    enemycharacter: "", // enemytile html id
+    enemyname: "", // enemy health id
+    enemyhealth: 0,  // enemy health stat
+    enemycounterattack: 0, // enemy counter attack
+    wins: 0, //win count
+    loses: 0, // loss count
+
+    attack: function() { // function to for player attack
         try{
+            if (gameo.enemycharacter === "") { // if no enemy is selected cancel attack
+                alert("Please select an enemy");
+                return;
+            }
+
+            // attack enemy
             gameo.enemyhealth = gameo.enemyhealth - gameo.characterattack;
             gameo.characterattack = gameo.characterattack + gameo.characterbaseatt;
             $(gameo.enemyname).text(gameo.enemyhealth.toString());
-
             $(gameo.enemycharacter).effect("shake");
+
+            // if enemy health reaches 0 mark him as defeated
             if (gameo.enemyhealth <= 0){
                 gameo.enemyhealth = 0;
                 $(gameo.enemyname).text(gameo.enemyhealth.toString());
                 gameo.defeatedenemy();
                 return;
             }
+
+            // other wise enemy counter attack
             gameo.characterhealth = gameo.characterhealth - gameo.enemycounterattack;
             $(gameo.charactername).text(gameo.characterhealth.toString());
             $(gameo.characterselection).effect("shake");
-            if (gameo.characterhealth < 1) {
+            if (gameo.characterhealth < 1) { // if health drops to 0 lose game
                 gameo.characterhealth = 0;
                 $(gameo.charactername).text(gameo.characterhealth.toString());
                 gameo.addnewevent("enemy", gameo.characterselection);
@@ -45,16 +55,19 @@ var gameo = {
             }
 
         } catch(error) {
-            alert("ATTACK ALERT\n" + error.message);
+                alert("There was an error attacking! Please try again, if the issue persists please reload the page");
+                console.error(error);
         }
 
     },
-    addevent: function(){
+    addevent: function(){ // add initial click events for selecting characters
         for (i=0; i < gameo.characters.length; i++) {
                 $("#charactertile" + i).on("click", function(){
                     if (gameo.charactername == "") {
+                        // player select first
                         gameo.selectcharacter($(this));
                     } else if(gameo.enemycharacter == ""){
+                        // ever other click will select enemy if one is not already selected
                         gameo.selectenemy($(this));
                     }
             });
@@ -62,22 +75,21 @@ var gameo = {
     },
     addnewevent: function(type, id){
         try {
-            if (type === "character")
-        {
-            $(id).off();
-            $(id).on("click", function(event) {
-                gameo.attack();
-            });
+            if (type === "character"){
+                $(id).off();
+                $(id).on("click", function(event) {
+                    gameo.attack();
+                });
 
-        }
-        if (type === "enemy")
+            }
+            if (type === "enemy")
+            {
+                $(id).off();
+            }
+        } catch (error)
         {
-            $(id).off();
+            console.error(error);
         }
-    } catch (error)
-     {
-         console.error(error);
-     }
     },
     formReset: function()  {
         gameo.resetVariables();
@@ -179,7 +191,6 @@ var gameo = {
             break;
             case "charactertile1":
                 gameo.charactername = "#chealth1";
-                //gameo.charactername = "gamecharactertwo";
                 gameo.characterattack = gamecharactertwo.characterattack;
                 gameo.characterbaseatt = gamecharactertwo.characterattack;
                 gameo.characterhealth = gamecharactertwo.characterhealth;
@@ -187,7 +198,6 @@ var gameo = {
             break;
             case "charactertile2":
                 gameo.charactername = "#chealth2";
-                //gameo.charactername = "gamecharacterthree";
                 gameo.characterattack = gamecharacterthree.characterattack;
                 gameo.characterbaseatt = gamecharacterthree.characterattack;
                 gameo.characterhealth = gamecharacterthree.characterhealth;
@@ -195,7 +205,6 @@ var gameo = {
             break;
             case "charactertile3":
                 gameo.charactername = "#chealth3";
-                //gameo.charactername = "gamecharacterfour";
                 gameo.characterattack = gamecharacterfour.characterattack;
                 gameo.characterbaseatt = gamecharacterfour.characterattack;
                 gameo.characterhealth = gamecharacterfour.characterhealth;
@@ -352,7 +361,7 @@ var gamecharacterfour = {
     characterimage: "assets/images/luminara.jpg",
     characterattack: 5,
     charactercounterattack: 15,
-    characterhealth: 120,
+    characterhealth: 110,
     addtoselectionarea: function() {
         try {
             var charheader = $("<h1>");
